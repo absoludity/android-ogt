@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Open Goal Tracker</string>
+    <string name="new_goal">I want to&#8230;</string>
+    <string name="button_create">Add</string>
+    <string name="menu_settings">Settings</string>
+
+</resources>
