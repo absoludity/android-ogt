@@ -43,6 +43,9 @@ public class NewGoalFragment extends Fragment {
     	EditText newGoal = (EditText) view.findViewById(R.id.new_goal);
     	
     	String title = newGoal.getText().toString();
+    	if (title.isEmpty()) {
+    		return;
+    	}
     	values.put(OGTContract.UserGoals.COLUMN_NAME_TITLE, title);
         	
         db.insert(OGTContract.UserGoals.TABLE_NAME, null, values);    		

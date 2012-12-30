@@ -22,6 +22,8 @@ public class MyGoalsActivityTest extends
 	@SuppressWarnings("deprecation")
 	public MyGoalsActivityTest() {
 		super("net.liveandletlearn.opengoaltracker", MyGoalsActivity.class);
+		// http://stackoverflow.com/questions/2547508/android-unit-testing-using-a-different-database-file
+		OGTContract.OGTDbHelper.mTesting = true;
 	}
 
 	@Override
@@ -32,6 +34,7 @@ public class MyGoalsActivityTest extends
 		mEditText = (EditText) mActivity.findViewById(R.id.new_goal);
 		mAddButton = (Button) mActivity.findViewById(R.id.add_goal_button);
 		OGTDbHelper dbHelper = new OGTDbHelper(mEditText.getContext());
+		dbHelper.truncateTestDatabase();
 		mDb = dbHelper.getReadableDatabase();
 	}
 	
@@ -55,14 +58,10 @@ public class MyGoalsActivityTest extends
 	}
 	
 	public void testAddEmptyGoal() {
-		// Can tests use a separate test database so I can truncate tables in setUp?
-		// http://stackoverflow.com/questions/2547508/android-unit-testing-using-a-different-database-file
-		long numBefore = DatabaseUtils.queryNumEntries(mDb, OGTContract.UserGoals.TABLE_NAME);
 		this.focusAddGoalButton();
 		
 		this.sendKeys("DPAD_CENTER");
 		
-		long numAfter = DatabaseUtils.queryNumEntries(mDb, OGTContract.UserGoals.TABLE_NAME);
-		assertEquals(numBefore, numAfter);
+		assertEquals(0, DatabaseUtils.queryNumEntries(mDb, OGTContract.UserGoals.TABLE_NAME));
 	}
 }

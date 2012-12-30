@@ -29,20 +29,36 @@ public class OGTContract {
 	
 	public static class OGTDbHelper extends SQLiteOpenHelper {
 		public static final int DATABASE_VERSION = 1;
-		public static final String DATABASE_NAME = "OGT.db";
+		public static boolean mTesting = false;
+		
+		public static String GetDatabaseName() {
+			if (mTesting) {
+				return "OGT_test.db";
+			} else {
+				return "OGT.db";
+			}
+		}
 		
 		public OGTDbHelper(Context context) {
-			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+			super(context, GetDatabaseName(), null, DATABASE_VERSION);
 		}
 		
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL(UserGoals.SQL_CREATE_TABLE);
 		}
+
+		public void truncateTestDatabase() {
+			if (mTesting == true) {
+				SQLiteDatabase db = getWritableDatabase();
+				db.execSQL(UserGoals.SQL_DELETE_TABLE);
+				onCreate(db);			
+			}
+		}
 		
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			// Until we've got a 1.0 schema :)
 			db.execSQL(UserGoals.SQL_DELETE_TABLE);
-			onCreate(db);
+			onCreate(db);			
 		}
 	}
 }
