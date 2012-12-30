@@ -35,19 +35,18 @@ public class NewGoalFragment extends Fragment {
 		return fragmentView;
 	}
 	
-    public void addGoal(View view) {
-    	
-    	SQLiteDatabase db = mDbHelper.getWritableDatabase();
-    	ContentValues values = new ContentValues();
-
+    public void addGoal(View view) {    	
     	EditText newGoal = (EditText) view.findViewById(R.id.new_goal);
-    	
     	String title = newGoal.getText().toString();
     	if (title.isEmpty()) {
     		return;
     	}
-    	values.put(OGTContract.UserGoals.COLUMN_NAME_TITLE, title);
-        	
-        db.insert(OGTContract.UserGoals.TABLE_NAME, null, values);    		
+    	
+    	SQLiteDatabase db = mDbHelper.getWritableDatabase();
+    	ContentValues values = new ContentValues();
+    	values.put(OGTContract.UserGoals.COLUMN_NAME_TITLE, title);	
+        db.insert(OGTContract.UserGoals.TABLE_NAME, null, values);
+        
+        newGoal.setText("");
     }
 }

@@ -40,9 +40,7 @@ public class MyGoalsActivityTest extends
 	
 	public void testPreConditions() {
 		assertTrue(mEditText.isFocused());
-	}
 
-	public void testEditTextHasFocus() {
 		this.sendKeys("A B C D E");
 			
 		assertEquals("abcde", mEditText.getText().toString());				
@@ -57,11 +55,21 @@ public class MyGoalsActivityTest extends
 			});
 	}
 	
-	public void testAddEmptyGoal() {
+	public void testAddEmptyGoalDoesNothing() {
 		this.focusAddGoalButton();
 		
 		this.sendKeys("DPAD_CENTER");
 		
 		assertEquals(0, DatabaseUtils.queryNumEntries(mDb, OGTContract.UserGoals.TABLE_NAME));
+	}
+	
+	public void testAddGoalClearsInput() {
+		this.sendKeys("A B C D E");
+		this.focusAddGoalButton();
+		
+		this.sendKeys("DPAD_CENTER");
+		
+		assertEquals(1, DatabaseUtils.queryNumEntries(mDb, OGTContract.UserGoals.TABLE_NAME));		
+		assertEquals("", mEditText.getText().toString());				
 	}
 }
