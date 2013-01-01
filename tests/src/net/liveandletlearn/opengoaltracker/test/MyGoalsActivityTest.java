@@ -62,7 +62,7 @@ public class MyGoalsActivityTest extends
 		
 		this.sendKeys("DPAD_CENTER");
 		
-		assertEquals(0, UserGoals.countGoals(mDb));
+		assertEquals(0, UserGoals.count(mDb));
 	}
 	
 	private int getListFragmentLength() {
@@ -79,7 +79,7 @@ public class MyGoalsActivityTest extends
 		
 		// The entry is now in the database, displayed in the list view and the new goal
 		// entry box is cleared.
-		assertEquals(1, DatabaseUtils.queryNumEntries(mDb, OGTContract.UserGoals.TABLE_NAME));		
+		assertEquals(1, UserGoals.count(mDb));
 		assertEquals(1, getListFragmentLength());
 		assertEquals("", mEditText.getText().toString());
 	}

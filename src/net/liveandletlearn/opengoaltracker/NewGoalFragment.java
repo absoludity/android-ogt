@@ -1,8 +1,9 @@
 package net.liveandletlearn.opengoaltracker;
 
 import net.liveandletlearn.opengoaltracker.OGTContract.OGTDbHelper;
+import net.liveandletlearn.opengoaltracker.OGTContract.UserGoals;
+import android.app.Activity;
 import android.app.Fragment;
-import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +16,11 @@ import android.widget.EditText;
 public class NewGoalFragment extends Fragment {
 	
 	private OGTDbHelper mDbHelper;
+	private OnAddGoalListener mAddGoalListener;
+	
+	public interface OnAddGoalListener {
+		public void onAddGoal(long id);
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,10 +48,20 @@ public class NewGoalFragment extends Fragment {
     	}
     	
     	SQLiteDatabase db = mDbHelper.getWritableDatabase();
-    	ContentValues values = new ContentValues();
-    	values.put(OGTContract.UserGoals.COLUMN_NAME_TITLE, title);	
-        db.insert(OGTContract.UserGoals.TABLE_NAME, null, values);
-        
+    	long id = UserGoals.insert(db, title);        
         newGoal.setText("");
+        mAddGoalListener.onAddGoal(id);
+    }
+    
+    @Override
+    public void onAttach(Activity activity) {
+    	super.onAttach(activity);
+    	
+    	try {
+    		mAddGoalListener = (OnAddGoalListener) activity;
+    	} catch (ClassCastException e) {
+    		throw new ClassCastException(
+    			activity.toString() + " must implement OnAddGoalListener.");
+    	}
     }
 }
