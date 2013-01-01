@@ -1,8 +1,10 @@
 package net.liveandletlearn.opengoaltracker.test;
 
+import net.liveandletlearn.opengoaltracker.GoalListFragment;
 import net.liveandletlearn.opengoaltracker.MyGoalsActivity;
 import net.liveandletlearn.opengoaltracker.OGTContract;
 import net.liveandletlearn.opengoaltracker.OGTContract.OGTDbHelper;
+import net.liveandletlearn.opengoaltracker.OGTContract.UserGoals;
 import net.liveandletlearn.opengoaltracker.R;
 import android.app.Activity;
 import android.database.DatabaseUtils;
@@ -60,7 +62,13 @@ public class MyGoalsActivityTest extends
 		
 		this.sendKeys("DPAD_CENTER");
 		
-		assertEquals(0, DatabaseUtils.queryNumEntries(mDb, OGTContract.UserGoals.TABLE_NAME));
+		assertEquals(0, UserGoals.countGoals(mDb));
+	}
+	
+	private int getListFragmentLength() {
+		GoalListFragment listFragment = (GoalListFragment) mActivity.getFragmentManager()
+				.findFragmentById(R.id.list);
+		return listFragment.getListAdapter().getCount();
 	}
 	
 	public void testAddGoalClearsInput() {
@@ -69,7 +77,10 @@ public class MyGoalsActivityTest extends
 		
 		this.sendKeys("DPAD_CENTER");
 		
+		// The entry is now in the database, displayed in the list view and the new goal
+		// entry box is cleared.
 		assertEquals(1, DatabaseUtils.queryNumEntries(mDb, OGTContract.UserGoals.TABLE_NAME));		
-		assertEquals("", mEditText.getText().toString());				
+		assertEquals(1, getListFragmentLength());
+		assertEquals("", mEditText.getText().toString());
 	}
 }

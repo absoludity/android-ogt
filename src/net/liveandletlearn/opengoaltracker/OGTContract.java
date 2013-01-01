@@ -1,6 +1,7 @@
 package net.liveandletlearn.opengoaltracker;
 
 import android.content.Context;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
@@ -25,6 +26,10 @@ public class OGTContract {
 		
 		private static final String SQL_DELETE_TABLE =
 			"DROP TABLE IF EXISTS " + OGTContract.UserGoals.TABLE_NAME;
+		
+		public static long countGoals(SQLiteDatabase db) {
+			return DatabaseUtils.queryNumEntries(db, OGTContract.UserGoals.TABLE_NAME);
+		}
 	}
 	
 	public static class OGTDbHelper extends SQLiteOpenHelper {

@@ -12,7 +12,6 @@
   <Button android:id="@+id/add_goal_button"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/button_create"
-      android:onClick="addGoal" />
+      android:text="@string/button_create" />
     
 </LinearLayout>

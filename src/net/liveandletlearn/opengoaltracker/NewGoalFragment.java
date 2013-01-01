@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,7 +23,7 @@ public class NewGoalFragment extends Fragment {
 		// Would it be better to pass this in from the view? We'd have the context then...
 		mDbHelper = new OGTDbHelper(fragmentView.getContext());
 		
-		// See http://stackoverflow.com/questions/6091194/how-to-handle-button-clicks-using-the-xml-onclick-within-fragments
+		// See http://stackoverflow.com/a/7969020/523729
 		Button addGoalButton = (Button) fragmentView.findViewById(R.id.add_goal_button);
 		addGoalButton.setOnClickListener(new OnClickListener() {
 			@Override
