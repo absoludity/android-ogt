@@ -3,7 +3,6 @@ package net.liveandletlearn.opengoaltracker;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.widget.BaseAdapter;
 
 public class MyGoalsActivity extends Activity implements NewGoalFragment.OnAddGoalListener {
 
