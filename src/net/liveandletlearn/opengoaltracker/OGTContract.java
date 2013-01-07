@@ -37,7 +37,6 @@ public class OGTContract {
 	    	values.put(COLUMN_NAME_TITLE, title);	
 	        return db.insert(TABLE_NAME, null, values);
 		}
-		
 	}
 	
 	public static class OGTDbHelper extends SQLiteOpenHelper {

@@ -4,9 +4,12 @@ import net.liveandletlearn.opengoaltracker.OGTContract.OGTDbHelper;
 import net.liveandletlearn.opengoaltracker.OGTContract.UserGoals;
 import android.app.ListFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 public class GoalListFragment extends ListFragment {
@@ -38,5 +41,11 @@ public class GoalListFragment extends ListFragment {
 	
 	public void refreshCursor() {
 		mAdapter.swapCursor(getCursor());
+	}
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+        Intent intent = new Intent(getActivity(), GoalDetailActivity.class);
+        startActivity(intent);	
 	}
 }
