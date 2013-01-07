@@ -122,7 +122,6 @@ public class GoalDetailActivity extends FragmentActivity implements ActionBar.Ta
 
         @Override
         public int getCount() {
-            // For this contrived example, we have a 100-object collection.
             return 4;
         }
         

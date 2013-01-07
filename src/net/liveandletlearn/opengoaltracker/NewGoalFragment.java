@@ -1,10 +1,7 @@
 package net.liveandletlearn.opengoaltracker;
 
-import net.liveandletlearn.opengoaltracker.OGTContract.OGTDbHelper;
-import net.liveandletlearn.opengoaltracker.OGTContract.UserGoals;
 import android.app.Activity;
 import android.app.Fragment;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +12,7 @@ import android.widget.EditText;
 
 public class NewGoalFragment extends Fragment {
 	
-	private OGTDbHelper mDbHelper;
+	private OGTDatabase mDb;
 	private OnAddGoalListener mAddGoalListener;
 	
 	public interface OnAddGoalListener {
@@ -26,8 +23,7 @@ public class NewGoalFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			                 Bundle savedInstanceState) {
 		final View fragmentView = inflater.inflate(R.layout.fragment_new_goal, container, false);
-		// Would it be better to pass this in from the view? We'd have the context then...
-		mDbHelper = new OGTDbHelper(fragmentView.getContext());
+		mDb = new OGTDatabase(fragmentView.getContext());
 		
 		// See http://stackoverflow.com/a/7969020/523729
 		Button addGoalButton = (Button) fragmentView.findViewById(R.id.add_goal_button);
@@ -47,8 +43,7 @@ public class NewGoalFragment extends Fragment {
     		return;
     	}
     	
-    	SQLiteDatabase db = mDbHelper.getWritableDatabase();
-    	long id = UserGoals.insert(db, title);        
+    	long id = mDb.insertGoal(title);        
         newGoal.setText("");
         mAddGoalListener.onAddGoal(id);
     }

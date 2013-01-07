@@ -2,9 +2,9 @@ package net.liveandletlearn.opengoaltracker.test;
 
 import net.liveandletlearn.opengoaltracker.GoalListFragment;
 import net.liveandletlearn.opengoaltracker.MyGoalsActivity;
-import net.liveandletlearn.opengoaltracker.OGTContract;
-import net.liveandletlearn.opengoaltracker.OGTContract.OGTDbHelper;
-import net.liveandletlearn.opengoaltracker.OGTContract.UserGoals;
+import net.liveandletlearn.opengoaltracker.OGTDatabase;
+import net.liveandletlearn.opengoaltracker.OGTDatabase.OGTDbHelper;
+import net.liveandletlearn.opengoaltracker.OGTDatabase.UserGoals;
 import net.liveandletlearn.opengoaltracker.R;
 import android.app.Activity;
 import android.database.DatabaseUtils;
@@ -25,7 +25,7 @@ public class MyGoalsActivityTest extends
 	public MyGoalsActivityTest() {
 		super("net.liveandletlearn.opengoaltracker", MyGoalsActivity.class);
 		// http://stackoverflow.com/questions/2547508/android-unit-testing-using-a-different-database-file
-		OGTContract.OGTDbHelper.mTesting = true;
+		OGTContract.OGTDatabase.mTesting = true;
 	}
 
 	@Override
