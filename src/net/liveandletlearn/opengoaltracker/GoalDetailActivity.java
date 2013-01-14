@@ -23,8 +23,10 @@ public class GoalDetailActivity extends FragmentActivity implements ActionBar.Ta
     /**
      * The {@link android.support.v4.view.ViewPager} that will display the object collection.
      */
-    ViewPager mViewPager;
+    private ViewPager mViewPager;
+    private OGTDatabase mDb; 
 
+    // XXX Need to pass the goal id (or unique hash?) when triggering the activity.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goal_details);
@@ -33,6 +35,7 @@ public class GoalDetailActivity extends FragmentActivity implements ActionBar.Ta
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+        mDb = new OGTDatabase(this);
         mGoalDetailsPagerAdapter = new GoalDetailsPagerAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mGoalDetailsPagerAdapter);
@@ -106,6 +109,13 @@ public class GoalDetailActivity extends FragmentActivity implements ActionBar.Ta
     }
     
     public static class GoalDetailsPagerAdapter extends FragmentPagerAdapter {
+    	// Convert to resource strings.
+        public static final String[] mLabels = {
+        	"Details",
+        	"Todo",
+        	"In progress",
+        	"Done",
+        };
 
         public GoalDetailsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -127,14 +137,14 @@ public class GoalDetailActivity extends FragmentActivity implements ActionBar.Ta
         
         @Override
         public CharSequence getPageTitle(int position) {
-            return "OBJECT " + (position + 1);
+            return mLabels[position];
         }
     }
 
     public static class DemoObjectFragment extends Fragment {
 
         public static final String ARG_OBJECT = "object";
-
+        
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
