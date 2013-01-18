@@ -55,7 +55,7 @@ public class OGTDatabase {
 			"DROP TABLE IF EXISTS " + OGTDatabase.UserGoals.TABLE_NAME;
 	}
 	
-	private static class DatabaseOpenHelper extends SQLiteOpenHelper {
+	public static class DatabaseOpenHelper extends SQLiteOpenHelper {
 		public static final int DATABASE_VERSION = 1;
 		public static boolean mTesting = false;
 		

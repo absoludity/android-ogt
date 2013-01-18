@@ -3,12 +3,8 @@ package net.liveandletlearn.opengoaltracker.test;
 import net.liveandletlearn.opengoaltracker.GoalListFragment;
 import net.liveandletlearn.opengoaltracker.MyGoalsActivity;
 import net.liveandletlearn.opengoaltracker.OGTDatabase;
-import net.liveandletlearn.opengoaltracker.OGTDatabase.OGTDbHelper;
-import net.liveandletlearn.opengoaltracker.OGTDatabase.UserGoals;
 import net.liveandletlearn.opengoaltracker.R;
 import android.app.Activity;
-import android.database.DatabaseUtils;
-import android.database.sqlite.SQLiteDatabase;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,13 +15,13 @@ public class MyGoalsActivityTest extends
 	private Activity mActivity;
 	private EditText mEditText;
 	private Button mAddButton;
-	private SQLiteDatabase mDb;
+	private OGTDatabase mOgtDb;
 	
 	@SuppressWarnings("deprecation")
 	public MyGoalsActivityTest() {
 		super("net.liveandletlearn.opengoaltracker", MyGoalsActivity.class);
 		// http://stackoverflow.com/questions/2547508/android-unit-testing-using-a-different-database-file
-		OGTContract.OGTDatabase.mTesting = true;
+		OGTDatabase.DatabaseOpenHelper.mTesting = true;
 	}
 
 	@Override
@@ -35,9 +31,9 @@ public class MyGoalsActivityTest extends
 		mActivity = getActivity();
 		mEditText = (EditText) mActivity.findViewById(R.id.new_goal);
 		mAddButton = (Button) mActivity.findViewById(R.id.add_goal_button);
-		OGTDbHelper dbHelper = new OGTDbHelper(mEditText.getContext());
-		dbHelper.truncateTestDatabase();
-		mDb = dbHelper.getReadableDatabase();
+		mOgtDb = new OGTDatabase(mEditText.getContext());
+		mOgtDb.truncateTestDatabase();
+		this.focusAddGoalText();
 	}
 	
 	public void testPreConditions() {
@@ -57,12 +53,21 @@ public class MyGoalsActivityTest extends
 			});
 	}
 	
+	public void focusAddGoalText() {
+		mActivity.runOnUiThread(
+			new Runnable() {
+				public void run() {
+					mEditText.requestFocus();
+				}
+			});
+	}
+	
 	public void testAddEmptyGoalDoesNothing() {
 		this.focusAddGoalButton();
 		
 		this.sendKeys("DPAD_CENTER");
 		
-		assertEquals(0, UserGoals.count(mDb));
+		assertEquals(0, mOgtDb.countGoals());
 	}
 	
 	private int getListFragmentLength() {
@@ -79,7 +84,7 @@ public class MyGoalsActivityTest extends
 		
 		// The entry is now in the database, displayed in the list view and the new goal
 		// entry box is cleared.
-		assertEquals(1, UserGoals.count(mDb));
+		assertEquals(1, mOgtDb.countGoals());
 		assertEquals(1, getListFragmentLength());
 		assertEquals("", mEditText.getText().toString());
 	}

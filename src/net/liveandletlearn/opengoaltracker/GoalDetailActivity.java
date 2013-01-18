@@ -108,13 +108,13 @@ public class GoalDetailActivity extends FragmentActivity implements ActionBar.Ta
         return super.onOptionsItemSelected(item);
     }
     
-    public static class GoalDetailsPagerAdapter extends FragmentPagerAdapter {
+    public class GoalDetailsPagerAdapter extends FragmentPagerAdapter {
     	// Convert to resource strings.
-        public static final String[] mLabels = {
-        	"Details",
-        	"Todo",
-        	"In progress",
-        	"Done",
+        public final int[] mLabels = {
+        	R.string.goal_details,
+        	R.string.todo,
+        	R.string.inprogress,
+        	R.string.done,
         };
 
         public GoalDetailsPagerAdapter(FragmentManager fm) {
@@ -137,7 +137,7 @@ public class GoalDetailActivity extends FragmentActivity implements ActionBar.Ta
         
         @Override
         public CharSequence getPageTitle(int position) {
-            return mLabels[position];
+        	return getString(mLabels[position]);
         }
     }
 
