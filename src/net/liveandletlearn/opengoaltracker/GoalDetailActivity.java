@@ -18,27 +18,32 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class GoalDetailActivity extends FragmentActivity implements ActionBar.TabListener {
-    GoalDetailsPagerAdapter mGoalDetailsPagerAdapter;
+    public static final String GOAL_ID = "goal_id";
+	GoalDetailsPagerAdapter mGoalDetailsPagerAdapter;
 
+    private long mGoalId;
     /**
      * The {@link android.support.v4.view.ViewPager} that will display the object collection.
      */
     private ViewPager mViewPager;
     private OGTDatabase mDb; 
 
-    // XXX Need to pass the goal id (or unique hash?) when triggering the activity.
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goal_details);
 
+        Intent intent = getIntent();
+        mGoalId = intent.getLongExtra(GoalDetailActivity.GOAL_ID, -1);
+        
         final ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         mDb = new OGTDatabase(this);
-        mGoalDetailsPagerAdapter = new GoalDetailsPagerAdapter(getSupportFragmentManager());
+        mGoalDetailsPagerAdapter = new GoalDetailsPagerAdapter(getSupportFragmentManager(), mGoalId);
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mGoalDetailsPagerAdapter);
+        //mViewPager.
    		
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -116,18 +121,28 @@ public class GoalDetailActivity extends FragmentActivity implements ActionBar.Ta
         	R.string.inprogress,
         	R.string.done,
         };
+        private long mGoalId;
 
-        public GoalDetailsPagerAdapter(FragmentManager fm) {
+        public GoalDetailsPagerAdapter(FragmentManager fm, long goalId) {
             super(fm);
+            mGoalId = goalId;
         }
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = new DemoObjectFragment();
-            Bundle args = new Bundle();
-            args.putInt(DemoObjectFragment.ARG_OBJECT, i + 1); // Our object is just an integer :-P
-            fragment.setArguments(args);
-            return fragment;
+        	if (i == 0) {
+        		Fragment fragment = new DemoObjectFragment();
+        		Bundle args = new Bundle();
+        		args.putInt(DemoObjectFragment.ARG_OBJECT, (int)mGoalId);
+	            fragment.setArguments(args);
+        		return fragment;
+        	} else {
+	            Fragment fragment = new DemoObjectFragment();
+	            Bundle args = new Bundle();
+	            args.putInt(DemoObjectFragment.ARG_OBJECT, i + 1);
+	            fragment.setArguments(args);
+	            return fragment;
+        	}
         }
 
         @Override
@@ -154,6 +169,21 @@ public class GoalDetailActivity extends FragmentActivity implements ActionBar.Ta
                     Integer.toString(args.getInt(ARG_OBJECT)));
             return rootView;
         }
+    }
+    
+    public static class GoalOverviewFragment extends Fragment {
+    	public static final String ARG_OBJECT = "object";
+    	
+    	@Override
+    	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    			                 Bundle savedInstanceState) {
+    		View rootView = inflater.inflate(R.layout.fragment_goal_overview, container, false);
+    		Bundle args = getArguments();
+            ((TextView) rootView.findViewById(android.R.id.text1)).setText(
+                    Integer.toString(args.getInt(ARG_OBJECT)));
+            return rootView;
+
+    	}
     }
 
 }
