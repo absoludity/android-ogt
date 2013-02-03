@@ -22,7 +22,7 @@ public class GoalListFragment extends ListFragment {
 		
 		Context context = this.getActivity();
 		mDb = new OGTDatabase(context);
-		mUserGoalColumns = new String[] {UserGoals.COLUMN_NAME_TITLE, UserGoals._ID};
+		mUserGoalColumns = new String[] {UserGoals.TITLE, UserGoals._ID};
 		Cursor cursor = mDb.UserGoals(mUserGoalColumns);
 		int[] to = new int[] {android.R.id.text1};
 		mAdapter = new SimpleCursorAdapter(

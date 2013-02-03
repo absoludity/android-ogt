@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
@@ -30,10 +31,21 @@ public class OGTDatabase {
 	
 	public long insertGoal(String title) {
     	ContentValues values = new ContentValues();
-    	values.put(UserGoals.COLUMN_NAME_TITLE, title);	
+    	values.put(UserGoals.TITLE, title);	
         return mDatabaseOpenHelper.getWritableDatabase().insert(
         	UserGoals.TABLE_NAME, null, values);		
 	}
+	
+	public Cursor GetGoal(Long goalId, String[] columns) {
+		String[] args = {
+			goalId.toString(),
+		};
+		Cursor c = mDatabaseOpenHelper.getReadableDatabase().query(
+			UserGoals.TABLE_NAME, columns, UserGoals._ID + "=?", args, null, null, null);
+		c.moveToFirst();
+		return c;
+	}
+	
 	public Cursor UserGoals(String[] columns) {
 		return mDatabaseOpenHelper.getReadableDatabase().query(
 			UserGoals.TABLE_NAME, columns, null, null, null, null, null);
@@ -41,14 +53,14 @@ public class OGTDatabase {
 
 	public static abstract class UserGoals implements BaseColumns {
 		public static final String TABLE_NAME = "usergoal";
-		public static final String COLUMN_NAME_TITLE = "title";
-		public static final String COLUMN_NAME_DESCRIPTION = "description";
+		public static final String TITLE = "title";
+		public static final String DESCRIPTION = "description";
 		// Can these be (or should these be) within the UserGoals class?
 		private static final String SQL_CREATE_TABLE =
 			"CREATE TABLE " + OGTDatabase.UserGoals.TABLE_NAME + " (" +
 			OGTDatabase.UserGoals._ID + " INTEGER PRIMARY KEY," +
-			OGTDatabase.UserGoals.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
-			OGTDatabase.UserGoals.COLUMN_NAME_DESCRIPTION + TEXT_TYPE +
+			OGTDatabase.UserGoals.TITLE + TEXT_TYPE + COMMA_SEP +
+			OGTDatabase.UserGoals.DESCRIPTION + TEXT_TYPE +
 			" )";
 		
 		private static final String SQL_DELETE_TABLE =

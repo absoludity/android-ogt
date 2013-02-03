@@ -1,8 +1,10 @@
 package net.liveandletlearn.opengoaltracker;
 
+import net.liveandletlearn.opengoaltracker.OGTDatabase.UserGoals;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -131,9 +133,9 @@ public class GoalDetailActivity extends FragmentActivity implements ActionBar.Ta
         @Override
         public Fragment getItem(int i) {
         	if (i == 0) {
-        		Fragment fragment = new DemoObjectFragment();
+        		Fragment fragment = new GoalOverviewFragment();
         		Bundle args = new Bundle();
-        		args.putInt(DemoObjectFragment.ARG_OBJECT, (int)mGoalId);
+        		args.putLong(GoalOverviewFragment.ARG_GOAL_ID, mGoalId);
 	            fragment.setArguments(args);
         		return fragment;
         	} else {
@@ -172,15 +174,19 @@ public class GoalDetailActivity extends FragmentActivity implements ActionBar.Ta
     }
     
     public static class GoalOverviewFragment extends Fragment {
-    	public static final String ARG_OBJECT = "object";
+    	public static final String ARG_GOAL_ID = "goal_id";
     	
     	@Override
     	public View onCreateView(LayoutInflater inflater, ViewGroup container,
     			                 Bundle savedInstanceState) {
     		View rootView = inflater.inflate(R.layout.fragment_goal_overview, container, false);
     		Bundle args = getArguments();
-            ((TextView) rootView.findViewById(android.R.id.text1)).setText(
-                    Integer.toString(args.getInt(ARG_OBJECT)));
+    		OGTDatabase db = new OGTDatabase(this.getActivity());
+    		String[] columns = new String[] {UserGoals._ID, UserGoals.TITLE};
+    		Cursor cursor = db.GetGoal(args.getLong(ARG_GOAL_ID), columns);
+    		int index = cursor.getColumnIndexOrThrow(UserGoals.TITLE);
+    		String title = cursor.getString(index); 
+            ((TextView) rootView.findViewById(android.R.id.text1)).setText(title);
             return rootView;
 
     	}
